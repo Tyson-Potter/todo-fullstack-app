@@ -18,6 +18,11 @@ function App() {
             content: "Buy groceries",
             currentState: "pending",
           },
+          {
+            id: "lololololo",
+            content: "Buy food",
+            currentState: "pending",
+          },
           { id: "f6g7h8i9j0", content: "Call mom", currentState: "completed" },
         ],
       },
@@ -43,7 +48,11 @@ function App() {
 
   return (
     <div className="App">
-      {user ? <Dashboard user={user} lists={user.lists} /> : <Login />}
+      {user ? (
+        <Dashboard user={user} setUser={setUser} lists={user.lists} />
+      ) : (
+        <Login />
+      )}
     </div>
   );
 }
