@@ -2,14 +2,10 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import Dashboard from "../src/components/Dashboard";
 
-
 function App() {
-
   const [lists, setLists] = useState([]);
-
-
+  const [selectedList, setSelectedList] = useState(null);
   useEffect(() => {
-
     const fetchLists = async () => {
       try {
         const response = await fetch("http://localhost:3000/api/lists/");
@@ -18,7 +14,7 @@ function App() {
         }
         const data = await response.json();
         setLists(data);
-        console.log(data)
+        console.log(data);
       } catch (error) {
         console.error("Error fetching lists:", error);
       }
@@ -29,9 +25,12 @@ function App() {
 
   return (
     <div className="App">
-
-      <Dashboard lists={lists} />
-
+      <Dashboard
+        setLists={setLists}
+        selectedList={selectedList}
+        setSelectedList={setSelectedList}
+        lists={lists}
+      />
     </div>
   );
 }
