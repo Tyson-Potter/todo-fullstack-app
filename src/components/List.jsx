@@ -1,17 +1,17 @@
-
 function List({ list, selectedList, setSelectedList }) {
   return (
-    <div
-      onClick={() => changeSelectedList(list)}
-      className="list-container"
-    >
-
-      <img src="src/assets/Checklist_Black.svg" alt="Delete" width="" height="24" className="todo-list-svg" />
+    <div onClick={() => changeSelectedList(list)} className="list-container">
+      <img
+        src="src/assets/Checklist_Black.svg"
+        alt="Delete"
+        width=""
+        height="24"
+        className="todo-list-svg"
+      />
       <div className="list-name">{list.name}</div>
 
       <div className="list-created">{formatDate(list.createdAt)}</div>
     </div>
-
   );
   function changeSelectedList(list) {
     console.log(list);
@@ -20,8 +20,7 @@ function List({ list, selectedList, setSelectedList }) {
     } else {
       setSelectedList(null);
     }
-  };
-
+  }
 
   function formatDate(isoDate) {
     const date = new Date(isoDate);
@@ -31,11 +30,9 @@ function List({ list, selectedList, setSelectedList }) {
       year: "numeric",
       hour: "numeric",
       minute: "2-digit",
-      hour12: true
+      hour12: true,
     });
-
   }
-
 }
 
 export default List;

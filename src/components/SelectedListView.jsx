@@ -106,7 +106,6 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
       }
 
       const data = await response.json();
-      //add reloading of the ui
 
       console.log("API Response:", data);
     } catch (err) {
