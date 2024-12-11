@@ -16,9 +16,9 @@ function ListItem({
       >
         <img
           src={
-            item.completed
-              ? "src/assets/GreenCheckmark.svg"
-              : "src/assets/CircleOutline.svg"
+            item.completed 
+              ? "/assets/GreenCheckmark.svg"
+              : "/assets/CircleOutline.svg"
           }
           alt="Toggle Completed"
           width="24"
@@ -31,12 +31,7 @@ function ListItem({
         className="list-item-component"
         onClick={() => handleDeleteTodoItem(item._id)}
       >
-        <img
-          src="src/assets/CancelButton.svg"
-          alt="Delete"
-          width="24"
-          height="24"
-        />
+        <img src="/assets/CancelButton.svg" alt="Delete" width="24" height="24" />
       </div>
     </div>
   );
@@ -44,7 +39,7 @@ function ListItem({
   async function handleDeleteTodoItem(itemId) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/lists/${selectedList._id}/todos/${itemId}`,
+        `https://advanced-todo-f2vy.onrender.com/api/lists/${selectedList._id}/todos/${itemId}`,
         {
           method: "DELETE",
           headers: {
@@ -76,7 +71,7 @@ function ListItem({
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/lists/${selectedList._id}/todos/${itemId}`,
+        `https://advanced-todo-f2vy.onrender.com/api/lists/${selectedList._id}/todos/${itemId}`,
         {
           method: "PATCH",
           headers: {
@@ -101,7 +96,9 @@ function ListItem({
 
   async function fetchLists() {
     try {
-      const response = await fetch("http://localhost:3000/api/lists/");
+      const response = await fetch(
+        "https://advanced-todo-f2vy.onrender.com/api/lists/"
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

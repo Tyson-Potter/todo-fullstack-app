@@ -46,7 +46,7 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
         ) : (
           <div className="" onClick={() => handleToggleAddTodoItemPane()}>
             <img
-              src={"src/assets/plusSignCircle.svg"}
+              src="/assets/PlusSignCircleAdd.svg"
               alt="Toggle Completed"
               width="24"
               height="24"
@@ -68,7 +68,9 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
 
   async function fetchLists() {
     try {
-      const response = await fetch("http://localhost:3000/api/lists/");
+      const response = await fetch(
+        "https://advanced-todo-f2vy.onrender.com/api/lists/"
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -91,7 +93,7 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/lists/${selectedList._id}/todos`,
+        `https://advanced-todo-f2vy.onrender.com/api/lists/${selectedList._id}/todos`,
         {
           method: "POST",
           headers: {

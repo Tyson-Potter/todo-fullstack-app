@@ -8,7 +8,9 @@ function App() {
   useEffect(() => {
     const fetchLists = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/lists/");
+        const response = await fetch(
+          "https://advanced-todo-f2vy.onrender.com/api/lists/"
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
