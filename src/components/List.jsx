@@ -1,4 +1,10 @@
-function List({ list, setLists, selectedList, setSelectedList }) {
+function List({
+  list,
+  setLists,
+  selectedList,
+  setSelectedList,
+  handleDeleteList,
+}) {
   return (
     <>
       <></>
@@ -34,45 +40,7 @@ function List({ list, setLists, selectedList, setSelectedList }) {
       setSelectedList(null);
     }
   }
-  async function handleDeleteList(listId) {
-    try {
-      const response = await fetch(
-        `https://advanced-todo-f2vy.onrender.com/api/lists/${listId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
 
-      if (!response.ok) {
-        throw new Error("Failed to update item.");
-      }
-
-      const data = await response.json();
-
-      console.log("API Response:", data);
-    } catch (err) {
-      console.error("API Error:", err.message);
-    }
-    fetchLists();
-  }
-  async function fetchLists() {
-    try {
-      const response = await fetch(
-        "https://advanced-todo-f2vy.onrender.com/api/lists/"
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setSelectedList(null);
-      setLists(data);
-    } catch (error) {
-      console.error("Error fetching lists:", error);
-    }
-  }
   function formatDate(isoDate) {
     const date = new Date(isoDate);
     return date.toLocaleString("en-US", {

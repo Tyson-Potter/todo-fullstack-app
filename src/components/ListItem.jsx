@@ -16,7 +16,7 @@ function ListItem({
       >
         <img
           src={
-            item.completed 
+            item.completed
               ? "/assets/GreenCheckmark.svg"
               : "/assets/CircleOutline.svg"
           }
@@ -108,7 +108,6 @@ function ListItem({
       if (updatedList) {
         setSelectedList(updatedList);
       }
-      console.log(data);
     } catch (error) {
       console.error("Error fetching lists:", error);
     }

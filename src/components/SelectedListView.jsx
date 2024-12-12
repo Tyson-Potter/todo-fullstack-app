@@ -1,10 +1,13 @@
 import FilterBox from "./FilterBox";
 import ListItem from "./ListItem";
 import { useState } from "react";
+import { fetchLists, addTodo } from "../services/TodoListService";
+
 function SelectedListView({ setSelectedList, selectedList, setLists }) {
   const [addToDoItemPanel, setAddToDoItemPanel] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [filter, setFilter] = useState("all");
+
   return (
     <div className="selected-list-view">
       <FilterBox filter={filter} setFilter={setFilter} />
@@ -23,7 +26,7 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
           })
           .map((todo) => (
             <ListItem
-              key={todo.id}
+              key={todo._id}
               selectedList={selectedList}
               setSelectedList={setSelectedList}
               itemContent={todo.task}
@@ -66,56 +69,20 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
     setAddToDoItemPanel(true);
   }
 
-  async function fetchLists() {
-    try {
-      const response = await fetch(
-        "https://advanced-todo-f2vy.onrender.com/api/lists/"
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setLists(data);
-      const updatedList = data.find((list) => list._id === selectedList._id);
-      if (updatedList) {
-        setSelectedList(updatedList);
-      }
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching lists:", error);
-    }
-  }
-  async function handleAddItem(inputValue) {
-    console.log("inputValue", inputValue);
-    if (inputValue.length < 1) {
+  async function handleAddItem(taskName) {
+    console.log("inputValue", taskName);
+    if (taskName.length < 1) {
       return;
     }
+    await addTodo(taskName, selectedList);
 
-    try {
-      const response = await fetch(
-        `https://advanced-todo-f2vy.onrender.com/api/lists/${selectedList._id}/todos`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ task: inputValue }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update item.");
-      }
-
-      const data = await response.json();
-
-      console.log("API Response:", data);
-    } catch (err) {
-      console.error("API Error:", err.message);
-    }
     setAddToDoItemPanel(false);
     setInputValue("");
-    fetchLists();
+    let lists = await fetchLists();
+    const updatedList = lists.find((list) => list._id === selectedList._id);
+    if (updatedList) {
+      setSelectedList(updatedList);
+    }
   }
 }
 

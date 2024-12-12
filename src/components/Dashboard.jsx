@@ -1,13 +1,13 @@
 import List from "./List";
 import { useState } from "react";
 import SelectedListView from "./SelectedListView";
+import { fetchLists, addList, delteList } from "../services/TodoListService";
 
 function Dashboard({ lists, selectedList, setSelectedList, setLists }) {
-  const [input, setInput] = useState("");
+  const [newListNameInput, setNewListNameInput] = useState("");
+
   return (
     <div>
-      <h1>ToDo App</h1>
-
       {selectedList ? (
         <SelectedListView
           lists={lists}
@@ -20,73 +20,45 @@ function Dashboard({ lists, selectedList, setSelectedList, setLists }) {
         <>
           <>
             <div className="create-new-list-container">
-              <button onClick={() => handleAddingList(input)}>
-                Create A New List
-              </button>{" "}
+              <button onClick={() => handleAddingList(newListNameInput)}>
+                Add List
+              </button>
               <input
+                className="create-new-list-input"
                 type="text"
-                placeholder="Enter your task"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
+                placeholder="Enter New List Name"
+                value={newListNameInput}
+                onChange={(e) => setNewListNameInput(e.target.value)}
               />
             </div>
           </>
           <div className="lists-container">
             {lists.map((list) => (
-              <>
-                
-                <List
-                  setLists={setLists}
-                  list={list}
-                  selectedList={selectedList}
-                  setSelectedList={setSelectedList}
-                />
-              </>
+              <List
+                setLists={setLists}
+                list={list}
+                selectedList={selectedList}
+                setSelectedList={setSelectedList}
+                handleDeleteList={handleDeleteList}
+                key={list._id}
+              />
             ))}
           </div>
         </>
       )}
     </div>
   );
-  async function fetchLists() {
-    try {
-      const response = await fetch(
-        "https://advanced-todo-f2vy.onrender.com/api/lists/"
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setLists(data);
-      setInput("");
-    } catch (error) {
-      console.error("Error fetching lists:", error);
-    }
+
+  async function handleAddingList(newListName) {
+    await addList(newListName);
+    const lists = await fetchLists();
+    setLists(lists);
+    setNewListNameInput("");
   }
-  async function handleAddingList(input) {
-    try {
-      const response = await fetch(
-        `https://advanced-todo-f2vy.onrender.com/api/lists/`,
-        {
-          method: "POST",
-          body: JSON.stringify({ name: input }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update item.");
-      }
-
-      const data = await response.json();
-
-      console.log("API Response:", data);
-    } catch (err) {
-      console.error("API Error:", err.message);
-    }
-    fetchLists();
+  async function handleDeleteList(listId) {
+    await delteList(listId);
+    const lists = await fetchLists();
+    setLists(lists);
   }
 }
 

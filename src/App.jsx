@@ -16,7 +16,6 @@ function App() {
         }
         const data = await response.json();
         setLists(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching lists:", error);
       }
@@ -27,6 +26,8 @@ function App() {
 
   return (
     <div className="App">
+      <div className="banner"></div>
+      <div className="Header">ToDo</div>
       <Dashboard
         setLists={setLists}
         selectedList={selectedList}
