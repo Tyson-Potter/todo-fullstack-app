@@ -24,7 +24,10 @@ function Dashboard() {
         <>
           <>
             <div className="create-new-list-container">
-              <button onClick={() => handleAddingList(newListNameInput)}>
+              <button
+                className="add-list-button"
+                onClick={() => handleAddingList(newListNameInput)}
+              >
                 Add List
               </button>
               <input
