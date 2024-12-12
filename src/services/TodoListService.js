@@ -124,5 +124,34 @@ async function toggleCompleted(listId, itemId, newStatus) {
     console.error("API Error:", err.message);
   }
 }
+async function editToDo(listId, itemId, newValue) {
+  try {
+    const response = await fetch(
+      `https://advanced-todo-f2vy.onrender.com/api/lists/${listId}/todos/${itemId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task: newValue }),
+      }
+    );
 
-export { fetchLists, addList, addTodo, delteList, deleteToDo, toggleCompleted };
+    if (!response.ok) {
+      throw new Error("Failed to update item.");
+    }
+
+    const data = await response.json();
+  } catch (err) {
+    console.error("API Error:", err.message);
+  }
+}
+export {
+  fetchLists,
+  addList,
+  addTodo,
+  delteList,
+  deleteToDo,
+  toggleCompleted,
+  editToDo,
+};
