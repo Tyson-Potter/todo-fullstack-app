@@ -10,10 +10,13 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
 
   return (
     <div className="selected-list-view">
-      <FilterBox filter={filter} setFilter={setFilter} />
-      <button onClick={() => changeSelectedList()}>Back To Other Lists</button>
-      <div className="selected-list-name">{selectedList.name}</div>
+      <button className="back-button" onClick={() => changeSelectedList()}>
+        Back To Other Lists
+      </button>
+      <span className="selected-list-name">{selectedList.name}</span>
       <div className="todos-container">
+        <div className="line "></div>
+        <FilterBox filter={filter} setFilter={setFilter} />
         {selectedList.todos
           .filter((todo) => {
             if (filter === "all") {
@@ -44,15 +47,18 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
               onChange={(e) => setInputValue(e.target.value)}
             />
             <button onClick={() => handleAddItem(inputValue)}>Add</button>
-            <button onClick={() => handleAddToDoItemCancel()}>Cencel</button>
+            <button onClick={() => handleAddToDoItemCancel()}>Cancel</button>
           </div>
         ) : (
-          <div className="" onClick={() => handleToggleAddTodoItemPane()}>
+          <div
+            className="plus-sign"
+            onClick={() => handleToggleAddTodoItemPane()}
+          >
             <img
               src="/assets/PlusSignCircleAdd.svg"
               alt="Toggle Completed"
-              width="24"
-              height="24"
+              width="40"
+              height="40"
             />
           </div>
         )}
@@ -70,15 +76,14 @@ function SelectedListView({ setSelectedList, selectedList, setLists }) {
   }
 
   async function handleAddItem(taskName) {
-    console.log("inputValue", taskName);
     if (taskName.length < 1) {
       return;
     }
     await addTodo(taskName, selectedList);
-
     setAddToDoItemPanel(false);
     setInputValue("");
     let lists = await fetchLists();
+    setLists(lists);
     const updatedList = lists.find((list) => list._id === selectedList._id);
     if (updatedList) {
       setSelectedList(updatedList);

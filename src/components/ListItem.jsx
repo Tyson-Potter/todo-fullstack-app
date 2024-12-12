@@ -1,5 +1,9 @@
 import React from "react";
-
+import {
+  deleteToDo,
+  fetchLists,
+  toggleCompleted,
+} from "../services/TodoListService";
 function ListItem({
   itemContent,
   id,
@@ -11,7 +15,7 @@ function ListItem({
   return (
     <div className="list-item">
       <div
-        className="list-item-component"
+        className=" list-item-checkbox"
         onClick={() => handleToggleCompleted(item._id, item.completed)}
       >
         <img
@@ -21,46 +25,35 @@ function ListItem({
               : "/assets/CircleOutline.svg"
           }
           alt="Toggle Completed"
+          width="33"
+          height="33"
+        />
+      </div>
+      <div className="task-name">{itemContent}</div>
+
+      <div
+        className="list-item-component"
+        onClick={() => handleDeleteTodoItem(selectedList._id, item._id)}
+      >
+        <img
+          src="/assets/CancelButton.svg"
+          alt="Delete"
           width="24"
           height="24"
         />
       </div>
-      <div className="Task-name">{itemContent}</div>
-
-      <div
-        className="list-item-component"
-        onClick={() => handleDeleteTodoItem(item._id)}
-      >
-        <img src="/assets/CancelButton.svg" alt="Delete" width="24" height="24" />
-      </div>
     </div>
   );
 
-  async function handleDeleteTodoItem(itemId) {
-    try {
-      const response = await fetch(
-        `https://advanced-todo-f2vy.onrender.com/api/lists/${selectedList._id}/todos/${itemId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update item.");
-      }
-
-      const data = await response.json();
-
-      console.log("API Response:", data);
-    } catch (err) {
-      console.error("API Error:", err.message);
+  async function handleDeleteTodoItem(listId, itemId) {
+    await deleteToDo(listId, itemId);
+    const data = await fetchLists();
+    setLists(data);
+    const updatedList = data.find((list) => list._id === selectedList._id);
+    if (updatedList) {
+      setSelectedList(updatedList);
     }
-    fetchLists();
   }
-
   async function handleToggleCompleted(itemId, status) {
     let newStatus = false;
     if (!status) {
@@ -69,47 +62,13 @@ function ListItem({
       newStatus = false;
     }
 
-    try {
-      const response = await fetch(
-        `https://advanced-todo-f2vy.onrender.com/api/lists/${selectedList._id}/todos/${itemId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ completed: newStatus }),
-        }
-      );
+    await toggleCompleted(selectedList._id, itemId, newStatus);
 
-      if (!response.ok) {
-        throw new Error("Failed to update item.");
-      }
-
-      const data = await response.json();
-
-      console.log("API Response:", data);
-    } catch (err) {
-      console.error("API Error:", err.message);
-    }
-    fetchLists();
-  }
-
-  async function fetchLists() {
-    try {
-      const response = await fetch(
-        "https://advanced-todo-f2vy.onrender.com/api/lists/"
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setLists(data);
-      const updatedList = data.find((list) => list._id === selectedList._id);
-      if (updatedList) {
-        setSelectedList(updatedList);
-      }
-    } catch (error) {
-      console.error("Error fetching lists:", error);
+    const data = await fetchLists();
+    setLists(data);
+    const updatedList = data.find((list) => list._id === selectedList._id);
+    if (updatedList) {
+      setSelectedList(updatedList);
     }
   }
 }

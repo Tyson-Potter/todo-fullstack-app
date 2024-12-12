@@ -1,10 +1,4 @@
-function List({
-  list,
-  setLists,
-  selectedList,
-  setSelectedList,
-  handleDeleteList,
-}) {
+function List({ list, setSelectedList, handleDeleteList }) {
   return (
     <>
       <></>
@@ -33,7 +27,6 @@ function List({
     </>
   );
   function changeSelectedList(list) {
-    console.log(list);
     if (list) {
       setSelectedList(list);
     } else {

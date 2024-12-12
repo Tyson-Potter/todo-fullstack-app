@@ -1,11 +1,15 @@
 import List from "./List";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SelectedListView from "./SelectedListView";
 import { fetchLists, addList, delteList } from "../services/TodoListService";
 
-function Dashboard({ lists, selectedList, setSelectedList, setLists }) {
+function Dashboard() {
   const [newListNameInput, setNewListNameInput] = useState("");
-
+  const [lists, setLists] = useState([]);
+  const [selectedList, setSelectedList] = useState(null);
+  useEffect(() => {
+    getLists();
+  }, []);
   return (
     <div>
       {selectedList ? (
@@ -48,12 +52,19 @@ function Dashboard({ lists, selectedList, setSelectedList, setLists }) {
       )}
     </div>
   );
-
-  async function handleAddingList(newListName) {
-    await addList(newListName);
+  async function getLists() {
     const lists = await fetchLists();
     setLists(lists);
-    setNewListNameInput("");
+  }
+  async function handleAddingList(newListName) {
+    if (newListName.length === 0) {
+      alert("List name cannot be empty");
+    } else {
+      await addList(newListName);
+      const lists = await fetchLists();
+      setLists(lists);
+      setNewListNameInput("");
+    }
   }
   async function handleDeleteList(listId) {
     await delteList(listId);

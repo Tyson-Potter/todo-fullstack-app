@@ -55,8 +55,6 @@ async function addTodo(task, selectedList) {
     }
 
     const data = await response.json();
-
-    console.log("API Response:", data);
   } catch (err) {
     console.error("API Error:", err.message);
   }
@@ -78,11 +76,53 @@ async function delteList(listId) {
     }
 
     const data = await response.json();
+  } catch (err) {
+    console.error("API Error:", err.message);
+  }
+}
+async function deleteToDo(listId, itemId) {
+  try {
+    const response = await fetch(
+      `https://advanced-todo-f2vy.onrender.com/api/lists/${listId}/todos/${itemId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    console.log("API Response:", data);
+    if (!response.ok) {
+      throw new Error("Failed to update item.");
+    }
+
+    const data = await response.json();
   } catch (err) {
     console.error("API Error:", err.message);
   }
 }
 
-export { fetchLists, addList, addTodo, delteList };
+async function toggleCompleted(listId, itemId, newStatus) {
+  try {
+    const response = await fetch(
+      `https://advanced-todo-f2vy.onrender.com/api/lists/${listId}/todos/${itemId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ completed: newStatus }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update item.");
+    }
+
+    const data = await response.json();
+  } catch (err) {
+    console.error("API Error:", err.message);
+  }
+}
+
+export { fetchLists, addList, addTodo, delteList, deleteToDo, toggleCompleted };

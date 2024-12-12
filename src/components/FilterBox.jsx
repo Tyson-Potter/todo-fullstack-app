@@ -3,7 +3,6 @@ import React from "react";
 const FilterBox = ({ filter, setFilter }) => {
   return (
     <div className="filter-box">
-      <span>Filter:</span>
       <button
         className={`filter-button ${filter === "all" ? "active" : ""}`}
         onClick={() => setFilter("all")}
